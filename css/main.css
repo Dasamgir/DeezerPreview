@@ -136,7 +136,7 @@ label{
 }
 
 .placeholder {
-    animation: loading 0.5s ease 0.4s infinite alternate;
+    animation: loading 0.5s ease 0.8s infinite alternate;
   }
   
   @keyframes loading {
@@ -147,4 +147,10 @@ label{
       opacity: 0.4;
     }
   }
-  
+
+  .btnDisable{
+    pointer-events: none;
+  }
+  .btnEnabled{
+    pointer-events: unset
+  }

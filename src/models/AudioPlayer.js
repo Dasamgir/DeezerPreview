@@ -49,12 +49,12 @@ class AudioPlayer {
     }
 
     set index(value){
-        console.log("asignando index");
-        console.log(this.index + value >= 0)
-        console.log(this.index + value < this.songs.length)
+        console.log("asignando index "+ value);
+        //console.log(this.index + value >= 0)
+        //console.log(this.index + value < this.songs.length)
         if(this.index + value >= 0 && 
            this.index + value < songs.length ){
-            this._index += value;
+            this._index = value;
             this.loadSong();
         }
     }
@@ -64,6 +64,41 @@ class AudioPlayer {
     }
 
     loadSong(){
+    // Coloca ClassList
+    player.classList.add("placeholder");
+    let btns=document.querySelector("#buttons");
+    btns.classList.add("btnDisable");
+    console.log(btns);
+
+    //Evento Fetch
+    var headers = new Headers();
+    headers.append("X-RapidAPI-Host", "deezerdevs-deezer.p.rapidapi.com");
+    headers.append("X-RapidAPI-Key", "0500753e09msheb8cbf7d5eb4841p187fcbjsna115c584dda2");
+
+    var opciones = {
+        method: 'GET',
+        headers: headers,
+        mode: 'cors',
+        cache: 'default'
+    };
+
+    fetch(`${songs[this.index].cover}`, {})
+            .then((response) => {
+            return response.blob()
+        })
+        .then((blob) => {
+            ap.gui = {
+                albumCover: { value: URL.createObjectURL(blob),  DOMElement: ap.gui.albumCover.DOMElement  }
+            }
+            console.log("despues");
+            console.log(player);
+            player.classList.remove("placeholder");
+            btns.classList.remove("btnDisable");
+            //this.player.loadSong();
+
+            console.log(btns);
+        })
+
         
         ap.src = songs[this.index].file;
             ap.gui = {
@@ -74,10 +109,6 @@ class AudioPlayer {
                 songName: {
                     value: songs[this.index].name,
                     DOMElement: ap.gui.songName.DOMElement
-                },
-                albumCover: {
-                    value: songs[this.index].cover,
-                    DOMElement: ap.gui.albumCover.DOMElement
                 }
             }
     }

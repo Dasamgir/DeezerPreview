@@ -64,53 +64,47 @@ class AudioPlayer {
     }
 
     loadSong(){
-    // Coloca ClassList
-    player.classList.add("placeholder");
-    let btns=document.querySelector("#buttons");
-    btns.classList.add("btnDisable");
-    console.log(btns);
+    
+    if(!player.classList.contains("placeholder")){
+        console.log("entraPlace");
+    ap.src = songs[this.index].file;
+    ap.gui = {
+        artistName: {
+            value: songs[this.index].artist,
+            DOMElement: ap.gui.artistName.DOMElement
+        },
+        songName: {
+            value: songs[this.index].name,
+            DOMElement: ap.gui.songName.DOMElement
+        },
+        albumCover: { value: songs[this.index].cover,  DOMElement: ap.gui.albumCover.DOMElement  }
+    
+    }
+}
+    console.log("Inicio_Load");
+    console.log(player.classList);
 
     //Evento Fetch
-    var headers = new Headers();
-    headers.append("X-RapidAPI-Host", "deezerdevs-deezer.p.rapidapi.com");
-    headers.append("X-RapidAPI-Key", "0500753e09msheb8cbf7d5eb4841p187fcbjsna115c584dda2");
-
-    var opciones = {
-        method: 'GET',
-        headers: headers,
-        mode: 'cors',
-        cache: 'default'
-    };
-
-    fetch(`${songs[this.index].cover}`, {})
-            .then((response) => {
+    // Promesa sobre album cancion
+/*
+        fetch(`${songs[this.index].cover}`, {})
+        .then((response) => {
             return response.blob()
         })
         .then((blob) => {
-            ap.gui = {
-                albumCover: { value: URL.createObjectURL(blob),  DOMElement: ap.gui.albumCover.DOMElement  }
+            ap.gui = { albumCover: { value: URL.createObjectURL(blob),  DOMElement: ap.gui.albumCover.DOMElement  } }
+
+            let btns=document.querySelector("#buttons");
+            if(player.classList.contains("placeholder")){
+                player.classList.remove("placeholder");
             }
+            if(btns.classList.contains("btnDisable")){
+                btns.classList.remove("btnDisable"); }
+            
             console.log("despues");
-            console.log(player);
-            player.classList.remove("placeholder");
-            btns.classList.remove("btnDisable");
-            //this.player.loadSong();
-
-            console.log(btns);
+            console.log(player.classList);
         })
-
-        
-        ap.src = songs[this.index].file;
-            ap.gui = {
-                artistName: {
-                    value: songs[this.index].artist,
-                    DOMElement: ap.gui.artistName.DOMElement
-                },
-                songName: {
-                    value: songs[this.index].name,
-                    DOMElement: ap.gui.songName.DOMElement
-                }
-            }
+    */
     }
 
     _loadSong(src) {
@@ -229,11 +223,43 @@ class AudioPlayer {
 
             },
             back: () => {this.index--; this.player.play()},
-            next: () => {this.index++; this.player.play()},
-            close: () => {window.sessionStorage.clear(); window.location = "./"},
+            next: () => {
+                this.index++; 
+                this.changeSong();
+                
+            },  
+            close: () => {window.sessionStorage.clear(); window.location = "./index.html"},
 
         }
         this._assignValues(this._buttons, btns, actions);
+    }
+
+    changeSong(){
+        // next
+        player.classList.add("placeholder");
+        let btns=document.querySelector("#buttons");
+        btns.classList.add("btnDisable");
+        console.log("next");
+        console.log(player.classList);
+
+        //load
+        fetch(`${songs[this.index].cover}`, {})
+        .then((response) => {
+            return response.blob()
+        })
+        .then((blob) => {
+            //ap.gui = { albumCover: { value: URL.createObjectURL(blob),  DOMElement: ap.gui.albumCover.DOMElement  } }
+
+            //let btns=document.querySelector("#buttons");
+            if(player.classList.contains("placeholder")){
+                player.classList.remove("placeholder");
+            }
+            if(btns.classList.contains("btnDisable")){
+                btns.classList.remove("btnDisable"); }
+            
+            console.log("despues");
+            console.log(player.classList);
+        })
     }
 
     get buttons() {
